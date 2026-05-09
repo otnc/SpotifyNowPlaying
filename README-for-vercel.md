@@ -32,7 +32,7 @@ This is the Vercel-compatible version of the **Spotify Now Playing** web applica
 You need to run the project locally **once** to generate the Spotify Refresh Token. You cannot generate this token directly on Vercel.
 
 1. **Clone the repository:**
-   git clone https://github.com/otoneko1102/SpotifyNowPlaying.git
+   git clone https://github.com/otnc/SpotifyNowPlaying.git
    cd spotifynowplaying
 
 2. **Install Dependencies:**
