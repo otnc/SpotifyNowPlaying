@@ -34,7 +34,7 @@
 
 1. **リポジトリをクローン:**
    ```bash
-   git clone https://github.com/otoneko1102/SpotifyNowPlaying.git
+   git clone https://github.com/otnc/SpotifyNowPlaying.git
    cd spotifynowplaying
    ```
 
