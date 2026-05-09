@@ -34,7 +34,7 @@ A web application that displays your current Spotify track with a beautiful UI. 
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/otoneko1102/SpotifyNowPlaying.git
+   git clone https://github.com/otnc/SpotifyNowPlaying.git
    cd spotifynowplaying
    ```
 
