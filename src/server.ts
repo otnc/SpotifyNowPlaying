@@ -15,6 +15,8 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const DISCORD_WEBHOOK_URL = isVercel
   ? undefined
   : process.env.DISCORD_WEBHOOK_URL;
+const MISSKEY_HOST = isVercel ? undefined : process.env.MISSKEY_HOST;
+const MISSKEY_API_KEY = isVercel ? undefined : process.env.MISSKEY_API_KEY;
 
 app.use(cors());
 app.use(express.json());
@@ -31,36 +33,47 @@ const isSpotifyAction = (action: string): action is SpotifyAction => {
   return (VALID_ACTIONS as readonly string[]).includes(action);
 };
 
-// --- Discord (for VPS or Local) ---
+// --- Discord / Misskey (for VPS or Local) ---
 if (!isVercel) {
   setInterval(async () => {
-    if (!DISCORD_WEBHOOK_URL) return;
-
     const song = await getNowPlaying();
 
     if (song.isPlaying && song.id && song.id !== lastTrackId) {
       lastTrackId = song.id;
 
-      const tweetText = `#NowPlaying\n${song.title} - ${song.artist}\n${song.url}`;
-      const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+      const nowPlayingText = `#NowPlaying\n${song.title} - ${song.artist}\n${song.url}`;
 
-      const content = {
-        username: "Now Playing Bot",
-        embeds: [
-          {
-            title: "🎵 Now Playing",
-            description: `[${song.title}](${song.url})\nby ${song.artist}\n\n[Tweet](${tweetUrl})`,
-            thumbnail: { url: song.albumArt },
-            color: 0x1db954,
-          },
-        ],
-      };
+      if (DISCORD_WEBHOOK_URL) {
+        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(nowPlayingText)}`;
+        const content = {
+          username: "Now Playing Bot",
+          embeds: [
+            {
+              title: "🎵 Now Playing",
+              description: `[${song.title}](${song.url})\nby ${song.artist}\n\n[Tweet](${tweetUrl})`,
+              thumbnail: { url: song.albumArt },
+              color: 0x1db954,
+            },
+          ],
+        };
+        try {
+          await axios.post(DISCORD_WEBHOOK_URL, content);
+          console.log(`Discord notified: ${song.title}`);
+        } catch (err) {
+          console.error("Discord webhook failed");
+        }
+      }
 
-      try {
-        await axios.post(DISCORD_WEBHOOK_URL, content);
-        console.log(`Discord notified: ${song.title}`);
-      } catch (err) {
-        console.error("Discord webhook failed");
+      if (MISSKEY_HOST && MISSKEY_API_KEY) {
+        try {
+          await axios.post(`https://${MISSKEY_HOST}/api/notes/create`, {
+            i: MISSKEY_API_KEY,
+            text: nowPlayingText,
+          });
+          console.log(`Misskey posted: ${song.title}`);
+        } catch (err) {
+          console.error("Misskey post failed");
+        }
       }
     }
   }, 10000);
