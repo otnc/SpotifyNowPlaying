@@ -2,7 +2,7 @@
 
 **[English](./README.md)** | **日本語** | **[English for Vercel](./README-for-vercel.md)** | **[Vercel用日本語](./README-for-vercel-ja.md)**
 
-現在再生中のSpotifyトラックを美しいUIで表示するWebアプリケーションです。再生コントロール、Discord通知、Twitter共有機能を備えたPWA対応の管理画面が含まれています。
+現在再生中のSpotifyトラックを美しいUIで表示するWebアプリケーションです。再生コントロール、Discord通知、Misskey自動投稿、Twitter共有機能を備えたPWA対応の管理画面が含まれています。
 
 ## 目次
 
@@ -83,7 +83,19 @@ SPOTIFY_CLIENT_SECRET="your_spotify_client_secret"
 SPOTIFY_REFRESH_TOKEN=""  # 今は空のままにしておく、ステップ3を参照
 ADMIN_PASSWORD="set_your_secure_password"
 DISCORD_WEBHOOK_URL="your_discord_webhook_url"  # オプション
+MISSKEY_HOST="misskey.example.com"              # オプション: Misskeyインスタンスのホスト名
+MISSKEY_API_KEY="your_misskey_api_key"          # オプション: Misskey APIキー
 ```
+
+> [!NOTE]
+> `MISSKEY_HOST` と `MISSKEY_API_KEY` はオプションです。両方を設定すると、曲が変わるたびに自動で `#NowPlaying` ノートを投稿します。APIキーはMisskeyの **設定 → API** から生成できます。
+>
+> 投稿フォーマット:
+> ```
+> #NowPlaying
+> 曲名 - アーティスト名
+> https://open.spotify.com/track/...
+> ```
 
 ### 3. リフレッシュトークンの取得
 

@@ -2,7 +2,7 @@
 
 **English** | **[日本語](./README-ja.md)** | **[English for Vercel](./README-for-vercel.md)** | **[Vercel用日本語](./README-for-vercel-ja.md)**
 
-A web application that displays your current Spotify track with a beautiful UI. It includes a PWA-enabled Admin panel for playback control, Discord notifications, and Twitter sharing integration.
+A web application that displays your current Spotify track with a beautiful UI. It includes a PWA-enabled Admin panel for playback control, Discord notifications, Misskey auto-posting, and Twitter sharing integration.
 
 ## Table of Contents
 
@@ -83,7 +83,19 @@ SPOTIFY_CLIENT_SECRET="your_spotify_client_secret"
 SPOTIFY_REFRESH_TOKEN=""  # Leave empty for now, see Step 3
 ADMIN_PASSWORD="set_your_secure_password"
 DISCORD_WEBHOOK_URL="your_discord_webhook_url"  # Optional
+MISSKEY_HOST="misskey.example.com"              # Optional: your Misskey instance hostname
+MISSKEY_API_KEY="your_misskey_api_key"          # Optional: Misskey API key
 ```
+
+> [!NOTE]
+> `MISSKEY_HOST` and `MISSKEY_API_KEY` are optional. When both are set, the app will automatically post a `#NowPlaying` note to Misskey each time the track changes. You can generate an API key from your Misskey instance under **Settings → API**.
+>
+> The post format is:
+> ```
+> #NowPlaying
+> Song Title - Artist Name
+> https://open.spotify.com/track/...
+> ```
 
 ### 3. Obtaining the Refresh Token
 
